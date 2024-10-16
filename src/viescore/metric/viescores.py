@@ -1,11 +1,11 @@
 import sys
 sys.path.insert(0, 'viescore')
 
-from utils import (
+from .utils import (
     mllm_output_to_dict
 )
 import math
-import vie_prompts
+from viescore.metric import vie_prompts as vp
 
 class VIEScore:
     def __init__(self, backbone="gpt4o", task="t2i", key_path=None) -> None:
@@ -16,7 +16,7 @@ class VIEScore:
             raise ValueError("task must be either 't2i' or 'tie'")
 
         if self.backbone_name == "gpt4o":
-            from mllm_tools.openai import GPT4o
+            from ..mllm_tools import GPT4o
             self.model = GPT4o(key_path)
         elif self.backbone_name == "gpt4v":
             from mllm_tools.openai import GPT4v
@@ -35,16 +35,16 @@ class VIEScore:
             self.model = MiniCPMV()
         else:
             raise NotImplementedError("backbone not supported")
-        self.context = vie_prompts._context_no_delimit
+        self.context = vp._context_no_delimit
         if self.task == "t2i":
-            self.SC_prompt = "\n".join([self.context, vie_prompts._prompts_0shot_one_image_gen_rule, vie_prompts._prompts_0shot_t2i_rule_SC])
-            self.PQ_prompt = "\n".join([self.context, vie_prompts._prompts_0shot_rule_PQ])
+            self.SC_prompt = "\n".join([self.context, vp._prompts_0shot_one_image_gen_rule, vp._prompts_0shot_t2i_rule_SC])
+            self.PQ_prompt = "\n".join([self.context, vp._prompts_0shot_rule_PQ])
         elif self.task == "tie":
-            self.SC_prompt = "\n".join([self.context, vie_prompts._prompts_0shot_two_image_edit_rule, vie_prompts._prompts_0shot_tie_rule_SC])
-            self.PQ_prompt = "\n".join([self.context, vie_prompts._prompts_0shot_rule_PQ])
+            self.SC_prompt = "\n".join([self.context, vp._prompts_0shot_two_image_edit_rule, vp._prompts_0shot_tie_rule_SC])
+            self.PQ_prompt = "\n".join([self.context, vp._prompts_0shot_rule_PQ])
         elif self.task == "t2v":
-            self.SC_prompt = "\n".join([self.context, vie_prompts._prompts_0shot_one_video_gen_rule, vie_prompts._prompts_0shot_t2v_rule_SC])
-            self.PQ_prompt = "\n".join([self.context, vie_prompts._prompts_0shot_t2v_rule_PQ])
+            self.SC_prompt = "\n".join([self.context, vp._prompts_0shot_one_video_gen_rule, vp._prompts_0shot_t2v_rule_SC])
+            self.PQ_prompt = "\n".join([self.context, vp._prompts_0shot_t2v_rule_PQ])
         
 
     def evaluate(self, image_prompts, text_prompt, extract_overall_score_only=False, extract_all_score=True, echo_output=False):
