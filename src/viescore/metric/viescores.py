@@ -84,17 +84,16 @@ class VIEScore:
             raise ValueError("rate_limit_exceeded")
         results_dict['SC'] = SC_dict
         results_dict['PQ'] = PQ_dict
+        results_dict['SC']['score'] = SC_score = min(results_dict['SC']['score'])
+        results_dict['PQ']['score'] = PQ_score = min(results_dict['PQ']['score'])
+        O_score = math.sqrt(SC_score * PQ_score)
+        results_dict['O'] = {'score': O_score}
+
         if echo_output:
             print("results_dict", results_dict)
         if extract_all_score:
-            SC_score = min(results_dict['SC']['score'])
-            PQ_score = min(results_dict['PQ']['score'])
-            O_score = math.sqrt(SC_score * PQ_score)
             return [SC_score, PQ_score, O_score]
         if extract_overall_score_only:
-            SC_scores = results_dict['SC']['score']
-            PQ_scores = results_dict['PQ']['score']
-            O_score = math.sqrt(min(SC_scores) * min(PQ_scores))
             return O_score
         return results_dict
 
