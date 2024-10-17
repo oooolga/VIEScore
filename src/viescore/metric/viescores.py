@@ -84,8 +84,8 @@ class VIEScore:
             raise ValueError("rate_limit_exceeded")
         results_dict['SC'] = SC_dict
         results_dict['PQ'] = PQ_dict
-        results_dict['SC']['score'] = SC_score = min(results_dict['SC']['score'])
-        results_dict['PQ']['score'] = PQ_score = min(results_dict['PQ']['score'])
+        SC_score = min(results_dict['SC']['score'])
+        PQ_score = min(results_dict['PQ']['score'])
         O_score = math.sqrt(SC_score * PQ_score)
         results_dict['O'] = {'score': O_score}
 
