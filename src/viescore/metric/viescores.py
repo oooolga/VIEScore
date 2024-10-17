@@ -54,12 +54,12 @@ class VIEScore:
             self.model.use_encode = False if isinstance(image_prompts[0], str) else True
             #print("Using encode:", self.model.use_encode)
         if self.task == "t2i":
-            self.SC_prompt = self.SC_prompt.replace("<prompt>", text_prompt)
+            SC_prompt = self.SC_prompt.replace("<prompt>", text_prompt)
         elif self.task == "tie":
-            self.SC_prompt = self.SC_prompt.replace("<instruction>", text_prompt)
+            SC_prompt = self.SC_prompt.replace("<instruction>", text_prompt)
         elif self.task == "t2v":
-            self.SC_prompt = self.SC_prompt.replace("<prompt>", text_prompt)
-        SC_prompt_final = self.model.prepare_prompt(image_prompts, self.SC_prompt)
+            SC_prompt = self.SC_prompt.replace("<prompt>", text_prompt)
+        SC_prompt_final = self.model.prepare_prompt(image_prompts, SC_prompt)
         if self.task == "tie":
             PQ_prompt_final = self.model.prepare_prompt(image_prompts[-1], self.PQ_prompt)
         else:
